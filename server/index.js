@@ -1,7 +1,8 @@
 const express = require("express");
-const sequelize = require("./db");
 const userRoutes = require("./routes/users");
 require("dotenv").config();
+const { sequelize } = require("./db");
+const Users = require("./models/Users");
 
 const app = express();
 app.use(express.json());
@@ -10,8 +11,8 @@ app.use("/api/users", userRoutes);
 
 const port = process.env.PORT || 5000;
 
+// Инициализация базы данных и сервера
 const init = async () => {
-  console.log("Connection has been established successfully.");
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -26,7 +27,5 @@ const init = async () => {
     console.error("Unable to connect to the database:", error);
   }
 };
-
-console.log(init);
 
 init();
