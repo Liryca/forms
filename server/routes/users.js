@@ -5,10 +5,8 @@ const Users = require("../models/Users");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware");
 
-// Регистрация пользователя
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
-
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await Users.create({
@@ -20,6 +18,7 @@ router.post("/register", async (req, res) => {
       theme: "light",
       status: "true",
     });
+
     res.status(201).json({ message: "User registered!", userId: newUser.id });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
@@ -29,10 +28,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Вход пользователя
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await Users.findOne({ where: { email } });
 
@@ -43,12 +40,20 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).send("Invalid credentials");
 
-    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "15m",
-    });
-    const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const accessToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.json({
       accessToken,
@@ -60,8 +65,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Эндпоинт для обновления refresh токена
-router.post("/token", (req, res) => {
+router.post("/refresh", (req, res) => {
   const refreshToken = req.body.token;
   if (!refreshToken) return res.sendStatus(401);
 

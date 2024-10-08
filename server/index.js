@@ -1,17 +1,17 @@
 const express = require("express");
-const userRoutes = require("./routes/users");
+const usersRoutes = require("./routes/users");
 require("dotenv").config();
 const { sequelize } = require("./db");
-const Users = require("./models/Users");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-app.use("/api/users", userRoutes);
+app.use("/api/users", usersRoutes);
 
 const port = process.env.PORT || 5000;
 
-// Инициализация базы данных и сервера
 const init = async () => {
   try {
     await sequelize.authenticate();
