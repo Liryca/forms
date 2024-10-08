@@ -1,25 +1,30 @@
 import React from "react";
 import { Field, useFormik, FormikProvider } from "formik";
 import { useDispatch } from "react-redux";
-import { registration } from "../store/actions/authActions";
+import { login } from "../store/actions/authActions";
 import { Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
+import { ErrorMessage } from "../components/ErrorMessage";
+import Spinner from "react-bootstrap/Spinner";
 
 const INITIAL_VALUES = {
-  username: "",
   email: "",
   password: "",
 };
 
-const Register = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
-    await dispatch(
-      registration(values.username, values.email, values.password)
-    );
-    navigate("/login");
+    try {
+      await dispatch(login(values.email, values.password));
+      navigate("/");
+    } catch (error) {
+      formik.setErrors(error.response);
+    } finally {
+      formik.setSubmitting(false);
+    }
   };
 
   const formik = useFormik({
@@ -29,20 +34,10 @@ const Register = () => {
 
   return (
     <>
-      <h2>Register</h2>
+      {formik.errors.data && <ErrorMessage message={formik.errors.data} />}
+      <h2>Login</h2>
       <form onSubmit={formik.handleSubmit}>
         <FormikProvider value={formik}>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              Name
-            </label>
-            <Field
-              name="username"
-              type="text"
-              className="form-control"
-              required
-            />
-          </div>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email
@@ -65,16 +60,26 @@ const Register = () => {
               required
             />
           </div>
-          <Button type="submit" variant="primary">
-            Register
+          <Button
+            disabled={formik.isSubmitting}
+            type="submit"
+            variant="primary"
+          >
+            {formik.isSubmitting ? (
+              <Spinner animation="border" role="status" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </FormikProvider>
       </form>
-      <Link className="link-underline-primary" to="/login">
-        or Login
-      </Link>
+      <div className="mt-3">
+        <Link className="link-underline-primary " to="/register">
+          or Register if you don't have an account yet
+        </Link>
+      </div>
     </>
   );
 };
 
-export default Register;
+export default Login;

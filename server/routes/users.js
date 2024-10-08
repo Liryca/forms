@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
     res.status(201).json({ message: "User registered!", userId: newUser.id });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      return res.status(400).json({ message: "Email already registered." });
+      return res.status(400).send("Email already registered.");
     }
     res.status(500).send("Error during registration");
   }
@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).send("Invalid credentials");
+    if (!isMatch) return res.status(401).send("Incorrect password or login");
 
     const accessToken = jwt.sign(
       { id: user.id },

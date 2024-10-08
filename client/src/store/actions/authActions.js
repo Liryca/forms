@@ -23,7 +23,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(setAuth(true));
     dispatch(setUser(response.data.user));
   } catch (e) {
-    console.error(e.response?.data?.message);
+    throw e;
   } finally {
     dispatch(setLoading(false));
   }
@@ -37,7 +37,7 @@ export const registration = (username, email, password) => async (dispatch) => {
     dispatch(setAuth(true));
     dispatch(setUser(response.data.user));
   } catch (e) {
-    console.error(e.response?.data?.message);
+    throw e;
   } finally {
     dispatch(setLoading(false));
   }
