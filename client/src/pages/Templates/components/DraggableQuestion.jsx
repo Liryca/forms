@@ -127,11 +127,7 @@ const DraggableQuestion = ({
                 </Field>
               </Form.Group>
 
-              <Button
-                disabled={!formik.dirty || formik.isSubmitting}
-                type="submit"
-                variant="primary"
-              >
+              <Button disabled={!formik.dirty} type="submit" variant="primary">
                 Save
               </Button>
             </FormikProvider>
