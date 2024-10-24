@@ -70,13 +70,17 @@ const TemplatePage = () => {
       ? templateMutations.createMutation.mutate(updatedTemplate, {
           onSuccess: (data) => navigate(`/templates/${data.id}`),
         })
-      : templateMutations.updateMutation.mutate({
-          authorId: user.id,
-          templateId,
-          updatedTemplate,
-        });
+      : templateMutations.updateMutation.mutate(
+          {
+            authorId: user.id,
+            templateId,
+            updatedTemplate,
+          },
+          {
+            onSuccess: (data) => navigate(`/templates/${data.id}`),
+          }
+        );
   };
-
   if (hasLoadingTemplates || hasLoadingQuestions) {
     return <SpinerLoader />;
   }

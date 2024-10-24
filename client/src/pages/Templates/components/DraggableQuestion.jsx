@@ -9,7 +9,6 @@ import { ItemType } from "../../../constants";
 import { typeQuestions } from "../../../constants";
 import { renderInputField } from "../../../utils/renderInputField";
 import { Field, useFormik, FormikProvider } from "formik";
-import SpinerLoader from "../../../components/Spiner";
 
 const getInitialValue = (question) => {
   return {
@@ -24,7 +23,6 @@ const getInitialValue = (question) => {
 const DraggableQuestion = ({
   question,
   index,
-  isLoading,
   moveQuestion,
   onDelete,
   onSave,
@@ -54,10 +52,6 @@ const DraggableQuestion = ({
     initialValues: INITIAL_VALUES,
     onSubmit,
   });
-
-  // if (isLoading) {
-  //   return <SpinerLoader />;
-  // }
 
   return (
     <Card className="mb-3" ref={(node) => ref(drop(node))}>
@@ -134,9 +128,7 @@ const DraggableQuestion = ({
               </Form.Group>
 
               <Button
-                disabled={
-                  !formik.dirty || !formik.isValid || formik.isSubmitting
-                }
+                disabled={!formik.dirty || formik.isSubmitting}
                 type="submit"
                 variant="primary"
               >

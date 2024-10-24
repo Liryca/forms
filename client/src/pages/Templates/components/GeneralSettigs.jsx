@@ -55,14 +55,6 @@ const GeneralSettings = ({ template, onSave, users }) => {
     validationSchema: GeneralSettingsScheme,
   });
 
-  // if (isLoading) {
-  //   return <Spinner />;
-  // }
-
-  // if (isError) {
-  //   return <ErrorMessage message="Error" />;
-  // }
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormikProvider value={formik}>
@@ -150,7 +142,6 @@ const GeneralSettings = ({ template, onSave, users }) => {
             </BootstrapForm.Group>
           </Col>
         </Row>
-        {/* {!formik.values.isPublic && ( */}
         <Row className="mb-3">
           <Col>
             <BootstrapForm.Group controlId="formUsersField">
@@ -191,9 +182,7 @@ const GeneralSettings = ({ template, onSave, users }) => {
             </BootstrapForm.Group>
           </Col>
         </Row>
-        {/* )} */}
-
-        <Button disabled={formik.isSubmitting} type="submit">
+        <Button disabled={formik.isSubmitting || !formik.dirty} type="submit">
           Save temlate
         </Button>
       </FormikProvider>

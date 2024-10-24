@@ -19,7 +19,6 @@ const UserPage = () => {
     data: templates = [],
     isLoading: loadingTemplates,
     isError: isErrorTemplates,
-    error,
   } = useQuery({
     queryKey: ["templates", user.id],
     queryFn: async () => await TemplateServices.getTemplatesByAuthor(user.id),
@@ -77,8 +76,7 @@ const UserPage = () => {
                         </td>
                         <td>
                           <Link
-                            onClick={() => deleteTemplate(template.id)}
-                            to={`/templates/delete/${template.id}`}
+                            onClick={() => deleteTemplate(user.id, template.id)}
                           >
                             Delete
                           </Link>
