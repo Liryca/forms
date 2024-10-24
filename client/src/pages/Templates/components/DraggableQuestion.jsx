@@ -26,7 +26,6 @@ const DraggableQuestion = ({
   index,
   isLoading,
   moveQuestion,
-  onUpdate,
   onDelete,
   onSave,
 }) => {
@@ -59,8 +58,6 @@ const DraggableQuestion = ({
   // if (isLoading) {
   //   return <SpinerLoader />;
   // }
-
-  console.log(formik.values);
 
   return (
     <Card className="mb-3" ref={(node) => ref(drop(node))}>
@@ -136,7 +133,13 @@ const DraggableQuestion = ({
                 </Field>
               </Form.Group>
 
-              <Button type="submit" variant="primary">
+              <Button
+                disabled={
+                  !formik.dirty || !formik.isValid || formik.isSubmitting
+                }
+                type="submit"
+                variant="primary"
+              >
                 Save
               </Button>
             </FormikProvider>

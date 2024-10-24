@@ -65,12 +65,6 @@ const TemplatePage = () => {
     loadingTemplate || loadingUsers || isFetchingTemplate || isFetchingUsers;
   const hasError = isErrorUsers || isErrorTemplate || isErrorQuestions;
 
-  // useEffect(() => {
-  //   if (!templateId) {
-  //     queryClient.setQueryData(["template"], null);
-  //   }
-  // }, [templateId]);
-
   const onSaveTemplate = (updatedTemplate) => {
     !templateId
       ? templateMutations.createMutation.mutate(updatedTemplate, {

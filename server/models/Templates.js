@@ -29,7 +29,7 @@ Templates.init(
     isPublic: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: true,
     },
     authorId: {
       type: DataTypes.INTEGER,

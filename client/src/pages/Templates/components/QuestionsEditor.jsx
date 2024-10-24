@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Button } from "react-bootstrap";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -36,6 +35,9 @@ const QuestionsEditor = ({ questions, authorId, templateId }) => {
     createMutationIsPending ||
     updateMutationIsPending ||
     deleteMutationIsPending;
+
+  const isError =
+    updatedTemplateIsError || createMutationIsError || deleteMutationIsError;
 
   const updateQuestion = (question, questionId) => {
     updateMutation.mutate(
@@ -99,7 +101,6 @@ const QuestionsEditor = ({ questions, authorId, templateId }) => {
             key={question.id}
             question={question}
             index={index}
-            isLoading={isLoading}
             moveQuestion={moveQuestion}
             onSave={updateQuestion}
             onDelete={deleteQuestion}

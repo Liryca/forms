@@ -11,7 +11,7 @@ const PrivateRoute = ({ element, allowedRoles }) => {
   const userRole = user?.role;
 
   if (!isAuth || (allowedRoles && !hasAccess(userRole, allowedRoles))) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return element;

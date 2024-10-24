@@ -66,15 +66,6 @@ const App = () => {
             />
           }
         />
-        {/* <Route
-          path="/templates"
-          element={
-            <PrivateRoute
-              element={<TemplatesPage />}
-              allowedRoles={["user", "admin"]}
-            />
-          }
-        /> */}
         <Route
           path="/templates/:templateId"
           element={

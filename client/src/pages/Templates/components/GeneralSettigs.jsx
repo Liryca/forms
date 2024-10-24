@@ -25,7 +25,7 @@ const getInitialValue = (template) => {
     description: template?.description || "",
     theme: template?.theme || null,
     image: template?.image || "",
-    isPublic: !!template?.isPublic || false,
+    isPublic: !!template?.isPublic || true,
     users: template?.users || [],
   };
 };
@@ -34,8 +34,6 @@ const GeneralSettings = ({ template, onSave, users }) => {
   const [displayField, setDisplayField] = useState("email");
 
   const INITIAL_VALUES = useMemo(() => getInitialValue(template), [template]);
-
-  console.log(template);
 
   const onSubmit = async (fields) => {
     onSave(fields);
@@ -133,6 +131,7 @@ const GeneralSettings = ({ template, onSave, users }) => {
           </Col>
         </Row>
         <Row className="mb-3">
+          <p>mark the template as public or select users</p>
           <Col>
             <BootstrapForm.Group controlId="formPublicAccess">
               <BootstrapForm.Check
@@ -151,48 +150,48 @@ const GeneralSettings = ({ template, onSave, users }) => {
             </BootstrapForm.Group>
           </Col>
         </Row>
-        {!formik.values.isPublic && (
-          <Row className="mb-3">
-            <Col>
-              <BootstrapForm.Group controlId="formUsersField">
-                <BootstrapForm.Label>
-                  Select Users By (required)
-                </BootstrapForm.Label>
-                <BootstrapForm.Check
-                  type="radio"
-                  label="Name"
-                  checked={displayField === "name"}
-                  onChange={() => setDisplayField("name")}
-                />
-                <BootstrapForm.Check
-                  type="radio"
-                  label="Email"
-                  checked={displayField === "email"}
-                  onChange={() => setDisplayField("email")}
-                />
-              </BootstrapForm.Group>
-              <BootstrapForm.Group controlId="formUsers">
-                <BootstrapForm.Label>Users</BootstrapForm.Label>
-                <Select
-                  isMulti
-                  name="users"
-                  options={mapperUsers(users, displayField)}
-                  onChange={(selectedOptions) => {
-                    formik.setFieldValue("users", selectedOptions);
-                    if (!selectedOptions.length) {
-                      formik.setFieldValue("isPublic", true);
-                    }
-                  }}
-                  getOptionLabel={(option) => option.username || option.email}
-                  getOptionValue={(option) => option.id}
-                  isClearable
-                  value={formik.values.users}
-                />
-                <ErrorText name="users" />
-              </BootstrapForm.Group>
-            </Col>
-          </Row>
-        )}
+        {/* {!formik.values.isPublic && ( */}
+        <Row className="mb-3">
+          <Col>
+            <BootstrapForm.Group controlId="formUsersField">
+              <BootstrapForm.Label>
+                Select Users By (required)
+              </BootstrapForm.Label>
+              <BootstrapForm.Check
+                type="radio"
+                label="Name"
+                checked={displayField === "name"}
+                onChange={() => setDisplayField("name")}
+              />
+              <BootstrapForm.Check
+                type="radio"
+                label="Email"
+                checked={displayField === "email"}
+                onChange={() => setDisplayField("email")}
+              />
+            </BootstrapForm.Group>
+            <BootstrapForm.Group controlId="formUsers">
+              <BootstrapForm.Label>Users</BootstrapForm.Label>
+              <Select
+                isMulti
+                name="users"
+                options={mapperUsers(users, displayField)}
+                onChange={(selectedOptions) => {
+                  formik.setFieldValue("users", selectedOptions);
+                  if (selectedOptions.length > 0) {
+                    formik.setFieldValue("isPublic", false);
+                  }
+                }}
+                getOptionLabel={(option) => option.username || option.email}
+                getOptionValue={(option) => option.id}
+                isClearable
+                value={formik.values.users}
+              />
+              <ErrorText name="users" />
+            </BootstrapForm.Group>
+          </Col>
+        </Row>
+        {/* )} */}
 
         <Button disabled={formik.isSubmitting} type="submit">
           Save temlate

@@ -48,7 +48,7 @@ init();
 // async function syncDatabase() {
 //   try {
 //     // await Users.sync({ alter: true });
-//     // await Templates.sync({ alter: true });
+//     await Templates.sync({ alter: true });
 //     // await TemplateUser.sync({ alter: true });
 //     await TemplateQuestions.sync({ alter: true });
 

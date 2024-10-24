@@ -1,5 +1,4 @@
 import Navbar from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import { useSelector } from "react-redux";
@@ -15,11 +14,10 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const signOut = () => {
-    console.log("Signing out...");
     dispatch(logout());
-    console.log("Redirecting to home page...");
     navigate("/");
   };
+
   const goAccount = () => {
     user.role === "admin" ? navigate("/admin") : navigate("/user");
   };
@@ -40,9 +38,7 @@ export const Header = () => {
             <span onClick={goAccount} className="avatar text-bg-secondary">
               {user.username[0].toUpperCase()}
             </span>
-            <Button onClick={signOut} href="/logout">
-              Logout
-            </Button>
+            <Button onClick={signOut}>Logout</Button>
           </Stack>
         ) : (
           <Stack direction="horizontal" gap={3}>

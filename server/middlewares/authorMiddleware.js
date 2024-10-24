@@ -10,8 +10,6 @@ const authorMiddleware = async (req, res, next) => {
         .status(400)
         .json({ message: "Идентификатор автора не указан." });
     }
-
-    // Получение шаблонов по authorId
     const templates = await Templates.findAll({
       where: { authorId: authorId },
     });
@@ -26,7 +24,7 @@ const authorMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Ошибка в authorMiddleware:", error); // Логируем ошибку для разработки
+    console.error("Ошибка в authorMiddleware:", error);
     return res.status(500).json({ message: "Произошла ошибка на сервере." });
   }
 };

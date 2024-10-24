@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "../index";
-import { Table, Button, Spinner } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import UserService from "../services/UserService";
 import { Header } from "../components/Header";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useSelector } from "react-redux";
+import SpinerLoader from "../components/Spiner";
 
 const AdminPage = () => {
   const [error, setError] = useState("");
@@ -45,14 +46,19 @@ const AdminPage = () => {
     onSettled: () => setTimeout(() => setError(""), 1000),
   });
 
+  if (isLoading) {
+    return <SpinerLoader />;
+  }
+
   return (
     <>
       <Header />
+
       <div className="container">
         <h3>
           {user.role === "admin" ? "Admin" : "User"} {user.username}
         </h3>
-        {isLoading || (isFetching && <Spinner />)}
+        {isFetching && <SpinerLoader />}
         {(error || isError) && (!isLoading || !isFetching) && (
           <ErrorMessage message={error} />
         )}
