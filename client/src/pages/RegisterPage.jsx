@@ -19,12 +19,9 @@ const Register = () => {
 
   const onSubmit = async (values) => {
     try {
-      await dispatch(
-        registration(values.username, values.email, values.password)
-      );
-      navigate("/");
+      dispatch(registration(values.username, values.email, values.password));
+      navigate("/login");
     } catch (error) {
-      console.log(error);
       formik.setErrors(error.response);
     } finally {
       formik.setSubmitting(false);
@@ -36,7 +33,12 @@ const Register = () => {
   });
 
   return (
-    <>
+    <div className="container">
+      <div className="mb-3">
+        <Link className="link-underline-primary" to="/">
+          Home
+        </Link>
+      </div>
       {formik.errors.data && <ErrorMessage message={formik.errors.data} />}
       <h2>Register</h2>
       <form onSubmit={formik.handleSubmit}>
@@ -88,11 +90,11 @@ const Register = () => {
         </FormikProvider>
       </form>
       <div className="mt-3">
-        <Link className="link-underline-primary mt-1 " to="/login">
+        <Link className="link-underline-primary mt-1" to="/login">
           or Login
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 

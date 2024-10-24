@@ -21,6 +21,7 @@ const Login = () => {
       await dispatch(login(values.email, values.password));
       navigate("/");
     } catch (error) {
+      console.log(error);
       formik.setErrors(error.response);
     } finally {
       formik.setSubmitting(false);
@@ -33,8 +34,13 @@ const Login = () => {
   });
 
   return (
-    <>
-      {formik.errors.data && <ErrorMessage message={formik.errors.data} />}
+    <div className="container">
+      <div className="mb-3">
+        <Link className="link-underline-primary" to="/">
+          Home
+        </Link>
+      </div>
+      {formik.errors?.data && <ErrorMessage message={formik.errors?.data} />}
       <h2>Login</h2>
       <form onSubmit={formik.handleSubmit}>
         <FormikProvider value={formik}>
@@ -78,7 +84,7 @@ const Login = () => {
           or Register if you don't have an account yet
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 
