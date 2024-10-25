@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Form, Card, Button } from "react-bootstrap";
+import { Form, Card, Button, Spinner } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
 import Select from "react-select";
 import { ItemType } from "../../../constants";
@@ -44,8 +44,10 @@ const DraggableQuestion = ({
 
   const INITIAL_VALUES = useMemo(() => getInitialValue(question), [question]);
 
-  const onSubmit = (fields) => {
-    onSave(fields, question.id);
+  const onSubmit = async (fields, actions) => {
+    await onSave(fields, question.id);
+    actions.resetForm({ values: fields });
+    actions.setSubmitting(false);
   };
 
   const formik = useFormik({
@@ -127,8 +129,16 @@ const DraggableQuestion = ({
                 </Field>
               </Form.Group>
 
-              <Button disabled={!formik.dirty} type="submit" variant="primary">
-                Save
+              <Button
+                disabled={!formik.dirty || formik.isSubmitting}
+                type="submit"
+                variant="primary"
+              >
+                {formik.isSubmitting ? (
+                  <Spinner animation="border" role="status" />
+                ) : (
+                  "Save"
+                )}
               </Button>
             </FormikProvider>
           </form>

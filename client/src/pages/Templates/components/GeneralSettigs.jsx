@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   Image,
+  Spinner,
 } from "react-bootstrap";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -32,21 +33,36 @@ const getInitialValue = (template) => {
 
 const GeneralSettings = ({ template, onSave, users }) => {
   const [displayField, setDisplayField] = useState("email");
+  const [isLoadImage, setIsloadImage] = useState(false);
 
   const INITIAL_VALUES = useMemo(() => getInitialValue(template), [template]);
 
   const onSubmit = async (fields) => {
-    onSave(fields);
+    await onSave(fields);
   };
 
   const onChangeFile = async (file) => {
-    const url = await TemplateServices.uploadFile(file);
-    formik.setFieldValue("image", url);
+    setIsloadImage(true);
+    try {
+      const url = await TemplateServices.uploadFile(file);
+      formik.setFieldValue("image", url);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsloadImage(false);
+    }
   };
 
   const onRemoveFile = async () => {
-    TemplateServices.deleteFile(formik.values.image);
-    formik.setFieldValue("image", null);
+    setIsloadImage(true);
+    try {
+      await TemplateServices.deleteFile(formik.values.image);
+      formik.setFieldValue("image", null);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsloadImage(false);
+    }
   };
 
   const formik = useFormik({
@@ -111,7 +127,7 @@ const GeneralSettings = ({ template, onSave, users }) => {
                 clickable
                 onChange={(files) => onChangeFile(files[0])}
               >
-                <Button>upload photo</Button>
+                <Button>{isLoadImage ? <Spinner /> : "Upload photo"}</Button>
               </Files>
               {formik.values.image && (
                 <div className="file-preview-container">
