@@ -58,6 +58,7 @@ class UserController {
 
   static async deleteUser(req, res) {
     const { id } = req.params;
+    console.log(id);
     try {
       const user = await Users.destroy({
         where: {
@@ -69,6 +70,7 @@ class UserController {
       }
       res.send("Remove user");
     } catch (error) {
+      console.log(error);
       res.status(500).send("Error remove user");
     }
   }
@@ -86,6 +88,27 @@ class UserController {
       res.send("Role changed");
     } catch (error) {
       res.status(500).send("Error changed role");
+    }
+  }
+
+  static async getUserInfoById(req, res) {
+    try {
+      const { id } = req.params;
+      const user = await Users.findByPk(id);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      res.json({
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        status: Number(user.status),
+      });
+    } catch (error) {
+      res.status(500).send("Error retrieving user info.");
     }
   }
 }

@@ -6,11 +6,13 @@ const adminMiddleware = async (req, res, next) => {
     const user = await Users.findOne({ where: { id: userId } });
 
     if (!user) {
-      return res.status(404).send("Access denied.");
+      return res.status(404).send("Access denied. User not found.");
     }
 
-    if (user.role !== "admin") {
-      return res.status(403).send("Access denied.");
+    if (!user.role || user.role !== "admin") {
+      return res
+        .status(403)
+        .send("Access denied. You do not have the necessary permissions.");
     }
 
     next();

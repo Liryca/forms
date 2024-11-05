@@ -33,7 +33,7 @@ TemplateQuestions.init(
       defaultValue: false,
     },
     answers: {
-      type: DataTypes.JSON, // Хранение ответов в формате JSON
+      type: DataTypes.JSON,
       allowNull: true,
     },
     templateId: {

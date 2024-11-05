@@ -9,9 +9,11 @@ export default class AuthService {
     });
   }
 
-  static async registration(username, email, password) {
+  static async registration(username, firstName, lastName, email, password) {
     return axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
       username,
+      firstName,
+      lastName,
       email,
       password,
     });

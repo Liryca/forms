@@ -15,15 +15,10 @@ import TemplateQuestionsService from "../../services/TemplateQuestionsService";
 import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from "../../components/ErrorMessage";
 
-// const renderTooltip = (props) => (
-//   <Tooltip id="tooltip-right" {...props}>
-//     Please save your settings to create questions.
-//   </Tooltip>
-// );
-
 const TemplatePage = () => {
   const { templateId } = useParams();
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
+  const { userId } = useParams();
   const templateMutations = useTemplateMutations();
   const navigate = useNavigate();
 
@@ -43,9 +38,9 @@ const TemplatePage = () => {
     isError: isErrorTemplate,
     isFetching: isFetchingTemplate,
   } = useQuery({
-    queryKey: ["template", user?.id, templateId],
-    queryFn: () => TemplateServices.getTemplate(user?.id, templateId),
-    enabled: !!user?.id && !!templateId,
+    queryKey: ["template", userId, templateId],
+    queryFn: () => TemplateServices.getTemplate(userId, templateId),
+    enabled: !!userId && !!templateId,
   });
 
   const {
@@ -56,7 +51,7 @@ const TemplatePage = () => {
   } = useQuery({
     queryKey: ["questions", templateId],
     queryFn: () =>
-      TemplateQuestionsService.getAllQuestions(user.id, template.id),
+      TemplateQuestionsService.getAllQuestions(userId, template.id),
     enabled: !!templateId,
   });
 
@@ -68,16 +63,17 @@ const TemplatePage = () => {
   const onSaveTemplate = (updatedTemplate) => {
     !templateId
       ? templateMutations.createMutation.mutate(updatedTemplate, {
-          onSuccess: (data) => navigate(`/templates/${data.id}`),
+          onSuccess: (data) => navigate(`/user/${userId}/templates/${data.id}`),
         })
       : templateMutations.updateMutation.mutate(
           {
-            authorId: user.id,
+            authorId: userId,
             templateId,
             updatedTemplate,
           },
           {
-            onSuccess: (data) => navigate(`/templates/${data.id}`),
+            onSuccess: (data) =>
+              navigate(`/user/${userId}/templates/${data.id}`),
           }
         );
   };
@@ -94,9 +90,8 @@ const TemplatePage = () => {
       <Header />
       <Container>
         <Stack gap={3}>
-          <Link className="link-underline-primary " to="/user">
-            Templates
-          </Link>
+          <Link to={`/user/${userId}`}> Templates</Link>
+
           <h3>{templateId ? "Edit template" : "Create new template"}</h3>
           <Tabs defaultActiveKey="general" id="template-tabs">
             <Tab eventKey="general" title="Settings">
@@ -110,7 +105,7 @@ const TemplatePage = () => {
             <Tab disabled={!templateId} eventKey="questions" title="Questions">
               <QuestionsEditor
                 questions={questions}
-                authorId={user.id}
+                authorId={userId}
                 templateId={template?.id}
               />
             </Tab>

@@ -7,6 +7,7 @@ import { Header } from "../components/Header";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useSelector } from "react-redux";
 import SpinerLoader from "../components/Spiner";
+import { Link } from "react-router-dom";
 
 const AdminPage = () => {
   const [error, setError] = useState("");
@@ -83,7 +84,9 @@ const AdminPage = () => {
                   page.users.map((user, index) => (
                     <tr key={user.id}>
                       <td>{index + 1}</td>
-                      <td>{user.username}</td>
+                      <td>
+                        <Link to={`/user/${user.id}`}>{user.username}</Link>
+                      </td>
                       <td>{user.email}</td>
                       <td>{user.status ? "Active" : "Block"}</td>
                       <td>

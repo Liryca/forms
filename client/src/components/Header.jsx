@@ -19,7 +19,7 @@ export const Header = () => {
   };
 
   const goAccount = () => {
-    user.role === "admin" ? navigate("/admin") : navigate("/user");
+    user.role === "admin" ? navigate("/admin") : navigate(`/user/${user.id}`);
   };
 
   return (

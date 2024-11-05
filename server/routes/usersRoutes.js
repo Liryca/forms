@@ -5,7 +5,6 @@ const tokenMiddleware = require("../middlewares/tokenMiddleware");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 const userStatusMiddleware = require("../middlewares/userStatusMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
-const authorMiddleware = require("../middlewares/authorMiddleware");
 
 router.get(
   "/",
@@ -44,6 +43,13 @@ router.patch(
   userStatusMiddleware,
   adminMiddleware,
   UserController.changeUserRole
+);
+router.get(
+  "/infoById/:id",
+  tokenMiddleware,
+  userStatusMiddleware,
+  roleMiddleware,
+  UserController.getUserInfoById
 );
 
 module.exports = router;

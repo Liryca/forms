@@ -15,6 +15,15 @@ Users.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    firstName: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+
+    lastName: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     email: {
       type: DataTypes.STRING(255),
       allowNull: false,

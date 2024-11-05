@@ -6,8 +6,10 @@ class UsersService {
       const response = await $api.get(
         `${process.env.REACT_APP_API_URL}/api/users?page=${pageParam.page}  &limit=${pageParam.limit}`
       );
-      return response.data;
+      console.log(response);
+      return response?.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -17,6 +19,17 @@ class UsersService {
       const response = await $api.get(`/api/users/users`);
       return response.data;
     } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async getUseInfoById(userId) {
+    try {
+      const response = await $api.get(`/api/users/infoById/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }

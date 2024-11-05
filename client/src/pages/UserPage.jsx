@@ -8,21 +8,23 @@ import useTemplateMutations from "../hook/useTemplatesMutation";
 import TemplateServices from "../services/TemplateServices";
 import { ErrorMessage } from "../components/ErrorMessage";
 import SpinerLoader from "../components/Spiner";
+import { useParams } from "react-router-dom";
 
 const forms = [];
 
 const UserPage = () => {
   const { user } = useSelector((state) => state.auth);
   const mutations = useTemplateMutations();
+  const { userId } = useParams();
 
   const {
     data: templates = [],
     isLoading: loadingTemplates,
     isError: isErrorTemplates,
   } = useQuery({
-    queryKey: ["templates", user.id],
-    queryFn: async () => await TemplateServices.getTemplatesByAuthor(user.id),
-    enabled: !!user.id,
+    queryKey: ["templates", userId],
+    queryFn: async () => await TemplateServices.getTemplatesByAuthor(userId),
+    enabled: !!userId,
   });
 
   const deleteTemplate = (authorId, templateId) =>
@@ -34,9 +36,16 @@ const UserPage = () => {
     <>
       <Header />
       <Container>
-        <Stack direction="horizontal" gap={3} className="mb-3">
-          <h3>Hello, {user.username}</h3>
-          <Link to={`/templates/new`}>Create template</Link>
+        <Stack direction="vertical" gap={3} className="mb-3">
+          {user.role === "admin" ? (
+            <h3>You are viewing the user account with id {userId}</h3>
+          ) : (
+            <h3>Hello, {user.username}</h3>
+          )}
+          <Link to={`/user/${userId}/templates/new`}>Create template</Link>
+          <Link to={`/user/${userId}/salesforce`}>
+            Create salesforceAccount
+          </Link>
         </Stack>
 
         {!templates.length && <p>You haven't created any templates</p>}
@@ -70,7 +79,7 @@ const UserPage = () => {
                       <tr key={template.id}>
                         <td>{index + 1}</td>
                         <td>
-                          <Link to={`/templates/${template.id}`}>
+                          <Link to={`/user/${userId}/templates/${template.id}`}>
                             {template.title}
                           </Link>
                         </td>

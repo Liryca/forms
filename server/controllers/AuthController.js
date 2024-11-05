@@ -5,11 +5,13 @@ const { Users } = require("../models/associations");
 
 class AuthController {
   static async register(req, res) {
-    const { username, email, password } = req.body;
+    const { username, firstName, lastName, email, password } = req.body;
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await Users.create({
         username,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
         role: "user",
@@ -60,6 +62,8 @@ class AuthController {
         user: {
           id: user.id,
           username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           role: user.role,
           status: Number(user.status),
@@ -79,6 +83,8 @@ class AuthController {
       res.json({
         id: user.id,
         username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         status: Number(user.status),
@@ -87,6 +93,7 @@ class AuthController {
       res.status(500).send("Error retrieving user info.");
     }
   }
+
   static async refresh(req, res) {
     const refreshToken = req.body.token;
 

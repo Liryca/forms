@@ -6,9 +6,13 @@ import { Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
 import Spinner from "react-bootstrap/Spinner";
+import { RegisterScheme } from "../validationsSchemes/RegisterScheme";
+import ErrorText from "../components/ErrorText";
 
 const INITIAL_VALUES = {
   username: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
 };
@@ -19,7 +23,15 @@ const Register = () => {
 
   const onSubmit = async (values) => {
     try {
-      dispatch(registration(values.username, values.email, values.password));
+      dispatch(
+        registration(
+          values.username,
+          values.firstName,
+          values.lastName,
+          values.email,
+          values.password
+        )
+      );
       navigate("/login");
     } catch (error) {
       formik.setErrors(error.response);
@@ -29,6 +41,7 @@ const Register = () => {
   };
   const formik = useFormik({
     initialValues: INITIAL_VALUES,
+    validationSchema: RegisterScheme,
     onSubmit,
   });
 
@@ -45,7 +58,7 @@ const Register = () => {
         <FormikProvider value={formik}>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
-              Name
+              Nick Name
             </label>
             <Field
               name="username"
@@ -53,7 +66,33 @@ const Register = () => {
               className="form-control"
               required
             />
+            <ErrorText name="username" />
           </div>
+          <div className="mb-3">
+            <label htmlFor="firstName" className="form-label">
+              First Name
+            </label>
+            <Field
+              name="firstName"
+              type="text"
+              className="form-control"
+              required
+            />
+            <ErrorText name="firstName" />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="lastName" className="form-label">
+              Last Name
+            </label>
+            <Field
+              name="lastName"
+              type="text"
+              className="form-control"
+              required
+            />
+            <ErrorText name="lastName" />
+          </div>
+
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email
@@ -64,6 +103,7 @@ const Register = () => {
               className="form-control"
               required
             />
+            <ErrorText name="email" />
           </div>
           <div className="mb-3">
             <label htmlFor="password" className="form-label">

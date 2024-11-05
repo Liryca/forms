@@ -10,6 +10,7 @@ import AdminPage from "./pages/AdminPage";
 import UserPage from "./pages/UserPage";
 import TemplatePage from "./pages/Templates/TemplatePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import CreateSalesforceAccount from "./pages/CreateSalesforceAccount";
 import { checkAuth } from "./store/actions/authActions";
 import "./App.css";
 import SpinerLoader from "./components/Spiner";
@@ -58,7 +59,7 @@ const App = () => {
           }
         />
         <Route
-          path="/user"
+          path="/user/:userId"
           element={
             <PrivateRoute
               element={<UserPage />}
@@ -67,7 +68,16 @@ const App = () => {
           }
         />
         <Route
-          path="/templates/:templateId"
+          path="/user/:userId/salesforce"
+          element={
+            <PrivateRoute
+              element={<CreateSalesforceAccount />}
+              allowedRoles={["user", "admin"]}
+            />
+          }
+        />
+        <Route
+          path="/user/:userId/templates/:templateId"
           element={
             <PrivateRoute
               element={<TemplatePage />}
@@ -77,7 +87,7 @@ const App = () => {
         />
 
         <Route
-          path="/templates/new"
+          path="/user/:userId/templates/new"
           element={
             <PrivateRoute
               element={<TemplatePage />}
